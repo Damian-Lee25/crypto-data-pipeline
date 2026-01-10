@@ -1,0 +1,18 @@
+my_crypto_dbt:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: md:my_db  # This is your MotherDuck database name
+      threads: 1
+      extensions:
+        - motherduck
+      token: "{{ env_var('MOTHERDUCK_TOKEN') }}"
+
+    prod:
+      type: duckdb
+      path: md:my_db
+      threads: 4
+      extensions:
+        - motherduck
+      token: "{{ env_var('MOTHERDUCK_TOKEN') }}"
