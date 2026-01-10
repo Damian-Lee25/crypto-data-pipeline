@@ -1,0 +1,7 @@
+[theme]
+base="dark"
+primaryColor="#00ffcc" # Neon Cyan/Mint
+backgroundColor="#0e1117" # Deep Navy
+secondaryBackgroundColor="#1f2630" # Card Background
+textColor="#fafafa"
+font="sans serif"
