@@ -15,8 +15,7 @@ if st.sidebar.button('🔄 Refresh Data'):
 st.title("📈 Crypto Trend & Volatility Tracker")
 st.markdown(f"**Status:** Connected to MotherDuck | **Updates:** Every 6 Hours")
 
-# 2. Connection Logic (using st.secrets for cloud-readiness)
-# This will check for secrets first, then fallback to environment variables
+# 2. Connection Logic
 token = st.secrets.get("MOTHERDUCK_TOKEN") or os.getenv("MOTHERDUCK_TOKEN")
 
 if not token:
@@ -37,14 +36,12 @@ try:
     df_trends, df_vol = load_data()
     
     # --- Data Filtering ---
-    # Get the latest timestamp to show current market state in metrics
     latest_ts = df_trends['ingested_at'].max()
     df_latest_trends = df_trends[df_trends['ingested_at'] == latest_ts]
     df_latest_vol = df_vol[df_vol['ingested_at'] == latest_ts]
 
-    # --- UI Layout: Top Metrics (Current Snapshot) ---
+    # --- UI Layout: Top Metrics ---
     col1, col2, col3, col4 = st.columns(4)
-    
     with col1:
         st.metric("Total Coins Tracked", len(df_latest_trends))
     with col2:
@@ -62,28 +59,36 @@ try:
     # --- UI Layout: Price Chart (Historical) ---
     st.subheader("📊 Historical Price Movements")
     
-    # Sidebar Filter for Coins
     all_coins = sorted(df_trends['name'].unique())
-    selected_coins = st.sidebar.multiselect("Select Coins to View", all_coins, default=all_coins[:5])
+    selected_coins = st.sidebar.multiselect("Select Coins to View", all_coins, default=all_coins[:4])
     
     df_plot = df_trends[df_trends['name'].isin(selected_coins)]
     
     if not df_plot.empty:
+        # We use facet_col to give each coin its own subplot
         fig = px.line(
             df_plot, 
             x='ingested_at', 
             y='current_price', 
+            facet_col='name', # Creates subplots
+            facet_col_wrap=2,  # Max 2 charts per row
             color='name',
             labels={'ingested_at': 'Time', 'current_price': 'Price (USD)'},
-            template="plotly_dark"
+            template="plotly_dark",
+            height=600
         )
+        
+        # CRITICAL FIX: This allows each subplot to have its own Y-axis range
+        fig.update_yaxes(matches=None, showticklabels=True)
+        # Clean up subplot titles (removes "name=")
+        fig.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+        
         st.plotly_chart(fig, use_container_width=True)
     else:
         st.warning("Please select at least one coin to view the trend chart.")
 
     # --- UI Layout: Analysis Table ---
     st.subheader("🔍 Detailed Market Analysis (Latest)")
-    # Merge trends and volatility for a "Master Table" view
     df_master = df_latest_trends.merge(
         df_latest_vol[['symbol', 'price_z_score', 'volatility_rank']], 
         on='symbol'
