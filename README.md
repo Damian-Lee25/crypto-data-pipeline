@@ -13,6 +13,7 @@ The primary goal was to build a resilient, automated "Modern Data Stack" that ha
 ## 🏗️ Architecture & Data Flow
 
 
+
 1.  **Ingestion (Python & S3):** A Python script fetches live market data from the CoinGecko API every 6 hours and stores it as versioned Parquet files in an AWS S3 Data Lake.
 2.  **Orchestration (GitHub Actions):** Automates the ingestion and dbt transformation cycles without requiring a dedicated server.
 3.  **Data Warehousing (MotherDuck):** Uses MotherDuck (DuckDB in the cloud) for high-performance OLAP processing.
@@ -44,13 +45,15 @@ The primary goal was to build a resilient, automated "Modern Data Stack" that ha
 ---
 
 ## 🚀 Getting Started
+
 ### Prerequisites
 * Python 3.10+
 * MotherDuck Account & Token
-* AWS S3 Bucket (for data lake)
+* AWS S3 Bucket (if running the full ingestion pipeline)
 
-### Local Setup
-1. **Clone the repo:**
-   ```bash
-   git clone [https://github.com/yourusername/crypto-intelligence-terminal.git](https://github.com/yourusername/crypto-intelligence-terminal.git)
-   cd crypto-intelligence-terminal
+### Local Setup & Installation
+
+**1. Clone the Repository**
+```bash
+git clone [https://github.com/Damian-Lee25/crypto-data-pipeline.git](https://github.com/Damian-Lee25/crypto-data-pipeline.git)
+cd crypto-data-pipeline
