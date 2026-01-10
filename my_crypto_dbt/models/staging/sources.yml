@@ -1,0 +1,26 @@
+# version: 2
+
+# models:
+#   - name: stg_crypto_data
+#     description: "Staging model for crypto data from S3 parquet file"
+#     columns: []
+#       # Add column documentation here after reviewing the data
+#       # Example:
+#       # - name: id
+#       #   description: "Unique identifier"
+
+version: 2
+
+sources:
+  - name: s3_bronze
+    # This location points directly to the static file your Python script creates
+    meta:
+      external_location: "s3://crypto-pipeline-838693051523/data/crypto_data.parquet"
+    tables:
+      - name: crypto_raw
+        description: "Raw cryptocurrency market data ingested from CoinGecko API"
+        columns:
+          - name: id
+            description: "Unique identifier for the coin"
+          - name: current_price
+            description: "Current price in USD"
