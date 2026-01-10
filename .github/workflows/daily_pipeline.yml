@@ -1,0 +1,36 @@
+name: Daily Crypto Sync
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs at midnight UTC
+  workflow_dispatch:   # Lets you run it manually for testing
+
+jobs:
+  run_pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          pip install pandas requests boto3 pyarrow dbt-duckdb
+
+      - name: Run Ingestion
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          COINGECKO_DEMO_KEY: ${{ secrets.COINGECKO_DEMO_KEY }}
+        run: python notebooks/ingest_crypto.py
+
+      - name: Run dbt Transformations
+        env:
+          MOTHERDUCK_TOKEN: ${{ secrets.MOTHERDUCK_TOKEN }}
+        run: |
+          cd my_crypto_dbt
+          dbt run --profiles-dir .
