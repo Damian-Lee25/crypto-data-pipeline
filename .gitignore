@@ -1,0 +1,25 @@
+# --- Security & Secrets ---
+.env
+*.env
+auth.json
+
+# --- Python ---
+venv/
+.venv/
+env/
+bin/
+lib/
+include/
+__pycache__/
+*.pyc
+
+# --- dbt (Paths relative to root) ---
+my_crypto_dbt/target/
+my_crypto_dbt/dbt_packages/
+my_crypto_dbt/logs/
+
+# --- Local Artifacts ---
+logs/
+.DS_Store
+*.db
+*.parquet
