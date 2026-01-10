@@ -2,8 +2,9 @@ name: Daily Crypto Sync
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs at midnight UTC
-  workflow_dispatch:   # Lets you run it manually for testing
+    # This runs at 00:00, 06:00, 12:00, and 18:00 UTC
+    - cron: '0 */6 * * *' 
+  workflow_dispatch:
 
 jobs:
   run_pipeline:
