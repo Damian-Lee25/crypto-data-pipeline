@@ -1,3 +1,6 @@
+# Streamlit secrets
+.streamlit/
+
 # --- Security & Secrets ---
 .env
 *.env
