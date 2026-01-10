@@ -1,23 +1,32 @@
 {{ config(materialized='view') }}
 
--- 1. Create a temporary secret for this session
--- This is the modern, secure way to handle S3 in DuckDB
-{% set init_s3 %}
-    CREATE SECRET IF NOT EXISTS (
-        TYPE S3,
-        KEY_ID '{{ env_var("AWS_ACCESS_KEY_ID") }}',
-        SECRET '{{ env_var("AWS_SECRET_ACCESS_KEY") }}',
-        REGION 'us-east-1'
-    );
-{% endset %}
-
--- Execute the secret creation (only works in DuckDB/MotherDuck)
-{% do run_query(init_s3) %}
-
 with source_data as (
-    select *
-    from read_parquet('s3://crypto-pipeline-838693051523/data/crypto_data.parquet')
+    select 
+        *,
+        -- This extracts the date from the folder name (partition_date=YYYY-MM-DD)
+        partition_date::DATE as snapshot_date 
+    from read_parquet(
+        's3://crypto-pipeline-838693051523/raw/*/*.parquet',
+        hive_partitioning = true
+    )
 )
 
-select *
+select
+    id,
+    symbol,
+    name,
+    current_price,
+    market_cap,
+    market_cap_rank,
+    total_volume,
+    high_24h,
+    low_24h,
+    price_change_24h,
+    price_change_percentage_24h,
+    circulating_supply,
+    total_supply,
+    ath,
+    atl,
+    ingested_at,
+    snapshot_date
 from source_data
