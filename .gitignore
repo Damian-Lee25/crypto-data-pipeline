@@ -1,3 +1,6 @@
+# Local user-specific files
+.user.yml
+
 # Streamlit secrets
 .streamlit/
 
