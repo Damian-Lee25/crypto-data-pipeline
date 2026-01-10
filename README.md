@@ -1,7 +1,7 @@
 # 🪙 Crypto Intelligence Terminal
 **A Professional Data Engineering Pipeline for Real-Time Crypto Analytics & Price Forecasting.**
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](YOUR_STREAMLIT_URL_HERE)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://crypto-data-pipeline-cszkrffulmsesvbrvumw4u.streamlit.app/)
 
 ## 🎯 Project Overview
 This project is a full-stack data engineering pipeline designed to ingest, transform, and visualize cryptocurrency market data. It moves beyond simple price tracking by implementing technical indicators (RSI), volatility analysis, and machine learning-based price projections.
