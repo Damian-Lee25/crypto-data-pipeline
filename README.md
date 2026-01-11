@@ -1,5 +1,6 @@
 # 🚀 Crypto Intelligence Terminal
 **A Modern Data Stack (MDS) pipeline for real-time market analysis, automated technical indicators, and price forecasting.**
+
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://crypto-data-pipeline-cszkrffulmsesvbrvumw4u.streamlit.app/)
 
 [![dbt-core](https://img.shields.io/badge/dbt-v1.11-orange.svg)](https://www.getdbt.com/)
