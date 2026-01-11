@@ -1,59 +1,71 @@
-# 🪙 Crypto Intelligence Terminal
-**A Professional Data Engineering Pipeline for Real-Time Crypto Analytics & Price Forecasting.**
+# 🚀 Crypto Intelligence Terminal
+**A Modern Data Stack (MDS) pipeline for real-time market analysis, automated technical indicators, and price forecasting.**
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://crypto-data-pipeline-cszkrffulmsesvbrvumw4u.streamlit.app/)
-
-## 🎯 Project Overview
-This project is a full-stack data engineering pipeline designed to ingest, transform, and visualize cryptocurrency market data. It moves beyond simple price tracking by implementing technical indicators (RSI), volatility analysis, and machine learning-based price projections.
-
-The primary goal was to build a resilient, automated "Modern Data Stack" that handles everything from raw API ingestion to predictive analytics.
+[![dbt-core](https://img.shields.io/badge/dbt-v1.11-orange.svg)](https://www.getdbt.com/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B.svg)](https://streamlit.io/)
+[![MotherDuck](https://img.shields.io/badge/MotherDuck-DuckDB-blue.svg)](https://motherduck.com/)
 
 ---
 
-## 🏗️ Architecture & Data Flow
+## 📊 Overview
+This project is a production-ready data pipeline that transforms raw cryptocurrency market data into actionable trading intelligence. It automates the extraction of data for the top 50 cryptocurrencies, applies advanced analytics via dbt, and serves a high-performance interactive dashboard.
 
 
-
-1.  **Ingestion (Python & S3):** A Python script fetches live market data from the CoinGecko API every 6 hours and stores it as versioned Parquet files in an AWS S3 Data Lake.
-2.  **Orchestration (GitHub Actions):** Automates the ingestion and dbt transformation cycles without requiring a dedicated server.
-3.  **Data Warehousing (MotherDuck):** Uses MotherDuck (DuckDB in the cloud) for high-performance OLAP processing.
-4.  **Transformation (dbt):**
-    * **fct_crypto_trends:** Calculates 7-day moving averages and trend signals.
-    * **fct_crypto_indicators:** Computes the Relative Strength Index (RSI) to identify overbought/oversold assets.
-    * **fct_crypto_volatility:** Identifies high-risk assets using Z-Score analysis.
-5.  **Analytics Layer (Streamlit & Scikit-Learn):** A custom-themed dashboard that runs Linear Regression models to project price trends 24 hours into the future.
 
 ---
 
 ## 🛠️ Tech Stack
-* **Language:** Python 3.x
-* **Database:** MotherDuck / DuckDB
+* **Ingestion:** Python + GitHub Actions (6-hour intervals)
+* **Data Lake:** AWS S3 (Parquet storage)
+* **Warehouse:** MotherDuck (Cloud DuckDB)
 * **Transformation:** dbt (Data Build Tool)
-* **Orchestration:** GitHub Actions
-* **Storage:** AWS S3 (Data Lake)
 * **Machine Learning:** Scikit-Learn (Linear Regression)
-* **Frontend:** Streamlit
+* **Visualization:** Streamlit
 
 ---
 
-## 🧪 Key Features
-* **Predictive Forecasting:** Extends historical trends into the future using mathematical modeling.
-* **Technical Terminal UI:** Custom CSS-injected dashboard designed for high-readability in trading environments.
-* **Fault-Tolerant Ingestion:** Implements API rate-limiting handling and automated retries.
-* **Automated Pipeline:** Fully hands-off data updates every 6 hours.
+## ⚡ Key Features
+
+### 1. Automated Analytics Pipeline
+* **Trend Analysis:** Uses 7-day Moving Averages to generate **Bullish/Bearish** signals.
+* **Technical Indicators:** Custom SQL logic for **14-period RSI** calculations.
+* **Volatility Scoring:** Z-Score outlier detection to identify extreme market movements.
+
+### 2. Data Reliability & Observability
+* **Source Freshness:** Automated monitoring to ensure S3 data is updated within a 12-hour SLA.
+* **Schema Testing:** 13+ automated dbt tests ensuring `not_null` constraints and categorical integrity for all market signals.
+
+### 3. Predictive Insights
+* **Price Forecasting:** A lightweight ML model that projects price targets for the next 24 hours based on historical price action.
 
 ---
 
-## 🚀 Getting Started
+## 🧠 Technical Decisions & Trade-offs
 
-### Prerequisites
-* Python 3.10+
-* MotherDuck Account & Token
-* AWS S3 Bucket (if running the full ingestion pipeline)
+### 1. Unified Model Architecture
+Instead of a complex multi-layered dbt DAG, I chose to implement **direct-to-mart modeling**. 
+* **Why:** This minimizes transformation latency and maintains a clear, traceable path from the CoinGecko API to the Streamlit UI.
+* **Trade-off:** While less modular, this approach reduced development overhead and ensured maximum performance for the MotherDuck OLAP engine.
 
-### Local Setup & Installation
+### 2. Linear Regression for Forecasting
+I opted for a **Scikit-Learn Linear Regression** model over more complex neural networks (like LSTM).
+* **Why:** Linear Regression provides high interpretability and low computational cost, allowing the dashboard to generate projections instantly without dedicated GPU infrastructure.
 
-**1. Clone the Repository**
+### 3. "Pull" vs "Push" Data Strategy
+The architecture uses **MotherDuck** to "pull" from the S3 data lake.
+* **Why:** This decouples storage (S3) from compute (MotherDuck). The data lake remains a cost-effective record of raw history while MotherDuck handles the heavy analytical lifting for the frontend.
+
+---
+
+## 🚀 Local Setup & Usage
+
+### 1. Prerequisites
+* Python 3.9+
+* MotherDuck Account
+* AWS S3 Access
+
+### 2. Installation
 ```bash
-git clone [https://github.com/Damian-Lee25/crypto-data-pipeline.git](https://github.com/Damian-Lee25/crypto-data-pipeline.git)
-cd crypto-data-pipeline
+git clone [https://github.com/your-username/crypto-intelligence-terminal.git](https://github.com/your-username/crypto-intelligence-terminal.git)
+cd crypto-intelligence-terminal
+pip install -r requirements.txt

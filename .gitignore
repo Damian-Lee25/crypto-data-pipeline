@@ -1,3 +1,6 @@
+# --- Cursor Docs ---
+.cursor/
+
 # Local user-specific files
 .user.yml
 
