@@ -62,12 +62,33 @@ The architecture uses **MotherDuck** to "pull" from the S3 data lake.
 ## 🚀 Local Setup & Usage
 
 ### 1. Prerequisites
-* Python 3.9+
-* MotherDuck Account
-* AWS S3 Access
+* **Python 3.9+**
+* **MotherDuck Account** (Data Warehouse)
+* **AWS Account** (S3 read/write access)
+* **CoinGecko API Key** (Free tier)
 
 ### 2. Installation
-```bash
-git clone [https://github.com/your-username/crypto-intelligence-terminal.git](https://github.com/your-username/crypto-intelligence-terminal.git)
-cd crypto-intelligence-terminal
-pip install -r requirements.txt
+1. **Clone the repository:**
+   git clone https://github.com/Damian-Lee25/crypto-intelligence-terminal.git
+
+2. **Navigate into the directory:**
+   cd crypto-intelligence-terminal
+
+3. **Install dependencies:**
+   pip install -r requirements.txt
+
+### 3. Environment Configuration
+Create a file named **.env** in the root directory and add your credentials. This ensures your secrets are never committed to GitHub:
+
+* MOTHERDUCK_TOKEN=your_token_here
+* AWS_ACCESS_KEY_ID=your_key_here
+* AWS_SECRET_ACCESS_KEY=your_secret_here
+* COINGECKO_API_KEY=your_api_key_here
+
+### 4. Running the Pipeline
+Execute these commands in order to transform your data and launch the UI:
+
+* **Verify Data Freshness:** `dbt source freshness`
+* **Run Transformations:** `dbt run`
+* **Run Quality Tests:** `dbt test`
+* **Launch Dashboard:** `dashboard.py`
