@@ -1,18 +1,54 @@
 version: 2
 
 models:
-  - name: stg_crypto_data
-    description: "Cleans and casts raw S3 data"
+  - name: fct_crypto_trends
+    description: "Main trend analysis table comparing current prices to 7-day moving averages."
+    columns:
+      - name: id
+        data_tests:
+          - not_null
+      - name: symbol
+        data_tests:
+          - not_null
+      - name: ingested_at
+        data_tests:
+          - not_null
+      - name: current_price
+        data_tests:
+          - not_null
+      - name: trend_signal
+        description: "Classification based on moving average crossover."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Bullish', 'Bearish', 'Neutral']
+
+  - name: fct_crypto_indicators
+    description: "Technical analysis table focusing on Relative Strength Index (RSI)."
     columns:
       - name: symbol
         data_tests:
           - not_null
-      - name: price_change_percentage_24h
+      - name: rsi
+        description: "14-period Relative Strength Index."
         data_tests:
           - not_null
+      - name: rsi_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Overbought', 'Oversold', 'Neutral']
 
   - name: fct_crypto_volatility
-    description: "Calculates Z-Scores for market analysis"
+    description: "Volatility metrics and Z-Score outlier detection."
     columns:
+      - name: symbol
+        data_tests:
+          - not_null
       - name: price_z_score
-        description: "Standard deviations from the market mean"
+        description: "Number of standard deviations from the mean price."
+        data_tests:
+          - not_null
+      - name: volatility_rank
+        data_tests:
+          - not_null

@@ -1,26 +1,28 @@
-# version: 2
-
-# models:
-#   - name: stg_crypto_data
-#     description: "Staging model for crypto data from S3 parquet file"
-#     columns: []
-#       # Add column documentation here after reviewing the data
-#       # Example:
-#       # - name: id
-#       #   description: "Unique identifier"
-
 version: 2
 
 sources:
   - name: s3_bronze
+    # Freshness configuration for all tables in this source
+    freshness:
+      warn_after: {count: 12, period: hour}
+      error_after: {count: 24, period: hour}
+    loaded_at_field: ingested_at  # The column dbt will check for time-stamps
+    
     # This location points directly to the static file your Python script creates
     meta:
       external_location: "s3://crypto-pipeline-838693051523/data/crypto_data.parquet"
+    
     tables:
       - name: crypto_raw
         description: "Raw cryptocurrency market data ingested from CoinGecko API"
         columns:
           - name: id
             description: "Unique identifier for the coin"
+            tests:
+              - not_null
           - name: current_price
             description: "Current price in USD"
+            tests:
+              - not_null
+          - name: ingested_at
+            description: "Timestamp of ingestion used for freshness checks"
