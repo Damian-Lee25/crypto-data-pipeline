@@ -12,7 +12,12 @@ Click Link to View Dashboard [![Streamlit App](https://static.streamlit.io/badge
 ## 📊 Overview
 This project is a production-ready data pipeline that transforms raw cryptocurrency market data into actionable trading intelligence. It automates the extraction of data for the top 50 cryptocurrencies, applies advanced analytics via dbt, and serves a high-performance interactive dashboard.
 
+---
 
+## 👤 Intended Users
+* **Momentum Traders:** Users seeking 24h RSI and crossover signals to identify entry/exit points.
+* **Market Analysts:** Users exploring volatility regimes across the top 50 assets.
+* **Analytics Managers:** Professionals evaluating the implementation of a Modern Data Stack (S3 + DuckDB + dbt).
 
 ---
 
@@ -23,6 +28,19 @@ This project is a production-ready data pipeline that transforms raw cryptocurre
 * **Transformation:** dbt (Data Build Tool)
 * **Machine Learning:** Scikit-Learn (Linear Regression)
 * **Visualization:** Streamlit
+
+---
+
+## 🧱 Data Modeling Approach
+The analytics layer is built on a **Star-Schema** foundation to ensure high performance and clear metric attribution.
+
+* **Fact Tables:** * `fct_crypto_trends`: Grain is **one row per asset per ingestion timestamp**. Contains price delta and moving average crossover signals.
+    * `fct_crypto_indicators`: Grain is **one row per asset per timestamp**. Houses technical metrics like RSI and volatility Z-scores.
+* **Dimensionality:** * Assets are categorized by unique CoinGecko IDs and symbols to ensure historical continuity even if ticker symbols change.
+
+### 📏 Metric Governance
+All core market indicators (RSI, Moving Averages, and Volatility Z-Scores) are calculated within the **dbt layer**. This establishes dbt as the **Single Source of Truth (SSOT)**. 
+* **Consistency:** Streamlit and ML models consume these pre-calculated metrics directly, preventing "logic drift" where different tools calculate indicators differently.
 
 ---
 
@@ -39,6 +57,13 @@ This project is a production-ready data pipeline that transforms raw cryptocurre
 
 ### 3. Predictive Insights
 * **Price Forecasting:** A lightweight ML model that projects price targets for the next 24 hours based on historical price action.
+
+---
+
+## 🔁 Automation & CI/CD
+* **Scheduled Ingestion:** Python scripts trigger every 6 hours via GitHub Actions.
+* **Proactive Testing:** Every dbt run is preceded by `dbt test` to ensure invalid market signals (e.g., negative prices or null IDs) never reach the production dashboard.
+* **Fail-Fast Architecture:** If the S3 source is older than 12 hours, the `source freshness` check fails the pipeline, preventing stale data visualization.
 
 ---
 
