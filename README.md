@@ -34,9 +34,12 @@ This project is a production-ready data pipeline that transforms raw cryptocurre
 ## 🧱 Data Modeling Approach
 The analytics layer is built on a **Star-Schema** foundation to ensure high performance and clear metric attribution.
 
-* **Fact Tables:** * `fct_crypto_trends`: Grain is **one row per asset per ingestion timestamp**. Contains price delta and moving average crossover signals.
-    * `fct_crypto_indicators`: Grain is **one row per asset per timestamp**. Houses technical metrics like RSI and volatility Z-scores.
-* **Dimensionality:** * Assets are categorized by unique CoinGecko IDs and symbols to ensure historical continuity even if ticker symbols change.
+* **Fact Tables:**
+    * `fct_crypto_trends`: Grain is **one row per asset per ingestion timestamp**. Contains price delta and moving average crossover signals.
+    * `fct_crypto_indicators`: Grain is **one row per asset per timestamp**. Houses technical metrics like **14-period RSI** and price momentum.
+    * `fct_crypto_volatility`: Grain is **one row per asset per timestamp**. Specifically handles **Z-Score outlier detection** and rolling standard deviation metrics.
+* **Dimensions:**
+    *Assets are categorized by unique CoinGecko IDs and symbols to ensure historical continuity even if ticker symbols change.
 
 ### 📏 Metric Governance
 All core market indicators (RSI, Moving Averages, and Volatility Z-Scores) are calculated within the **dbt layer**. This establishes dbt as the **Single Source of Truth (SSOT)**. 
