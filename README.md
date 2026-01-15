@@ -67,6 +67,14 @@ All core market indicators (RSI, Moving Averages, and Volatility Z-Scores) are c
 
 ---
 
+## ⚠️ Operational Realism & Edge Cases
+Building in a volatile market requires handling data imperfections:
+* **Gap Filling:** Missing price intervals are handled via forward-filling logic to prevent "breaks" in 7-day moving average calculations.
+* **API Rate Limits:** Ingestion logic includes exponential backoff to handle CoinGecko's free-tier rate limits without failing the pipeline.
+* **Model Constraints:** The Linear Regression forecast is optimized for **short-term (24h) trend continuity** and is explicitly not intended for long-horizon or "black swan" event prediction.
+
+---
+
 ## 🧠 Technical Decisions & Trade-offs
 
 ### 1. Unified Model Architecture
@@ -116,4 +124,4 @@ Execute these commands in order to transform your data and launch the UI:
 * **Verify Data Freshness:** `dbt source freshness`
 * **Run Transformations:** `dbt run`
 * **Run Quality Tests:** `dbt test`
-* **Launch Dashboard:** `dashboard.py`
+* **Launch Dashboard:** `streamlit run dashboard.py`
